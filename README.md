@@ -30,7 +30,7 @@ conda activate NeuroTD
 Install dependencies and the local library with `pip`.
 
 ```bash
-pip install -r requirements-dev.txt
+pip install -r requirements.txt
 ```
 
 This process usually takes several minutes.
@@ -43,10 +43,10 @@ This process usually takes several minutes.
 import numpy as np
 from simulation import Simulation
 
-# Define the shifts for the simulation in milliseconds
+# Define the time-varying, shifts for the simulation in seconds
 shifts = np.linspace(1.56e-3, 3.32e-3, 10)
 
-# Initialize the Simulation instance with desired parameters
+# Initialize the Simulation instance with desired parameters: total 1s, 5120 Hz, 10 shifts
 delay_simulation = Simulation(time=1, sampling_rate=5120, shifts=shifts, noise_std=0.20, shape='default')
 
 # Add methods for comparison, such as 'dtw' and 'ctw'
