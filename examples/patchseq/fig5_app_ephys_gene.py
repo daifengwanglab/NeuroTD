@@ -45,6 +45,9 @@ from neurotd.app_ephys_gene.paths import (
 )
 from neurotd.app_ephys_gene.plotting import plot_all_sweeps_for_cell
 
+RESULT_PATH.mkdir(parents=True, exist_ok=True)
+FIGURE_PATH.mkdir(parents=True, exist_ok=True)
+
 plt.ion()  # enable interactive mode for command-line script execution (non-blocking figure display)
 
 SHOW_EXTRA_PLOTS = False  # set to True to see extra plots for debugging

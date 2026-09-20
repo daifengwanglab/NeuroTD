@@ -1,54 +1,32 @@
-# ======================================================
-# Whitelist-style .gitignore for NeuroTD
-#
-# Policy:
-#   - Ignore everything by default
-#   - Explicitly allow only:
-#       * repository metadata
-#       * Python source files under src/neurotd/
-#       * README figures under src/neurotd/img/
-#
-# This prevents accidental publication of data, results,
-# development artifacts, or experimental files.
-# ======================================================
-
-# Ignore everything by default
+# Deny by default: do not publish raw recordings, generated results or environments.
 *
-
-# ------------------------------------------------------
-# Allow core repository files
-# ------------------------------------------------------
 !.gitignore
 !README.md
 !pyproject.toml
 !LICENSE.txt
 !CHANGELOG.md
-
-# ------------------------------------------------------
-# Allow NeuroTD source tree.
-# NOTE: !src/neurotd/**/*.py didn't work to recursively include all .py in src/neurotd/,
-# Need explicitly allow a folder before allowing files/subfolder within it.
-# ------------------------------------------------------
 !src/
 !src/neurotd/
-!src/neurotd/*.py
-!src/neurotd/app_ephys_gene/
-!src/neurotd/app_ephys_gene/*.py
-!src/neurotd/app_iEEG/
-!src/neurotd/app_iEEG/*.py
-
-# ------------------------------------------------------
-# Allow README figures
-# ------------------------------------------------------
-!src/neurotd/img/
-!src/neurotd/img/*.png
-
-# ------------------------------------------------------
-# Optional: Allow Data file if < 100MB
-# ------------------------------------------------------
-!src/neurotd/app_ephys_gene/data/
-!src/neurotd/app_ephys_gene/data/processed/
-!src/neurotd/app_ephys_gene/data/processed/cell_name_to_cell_id_and_sample_id.csv
-!src/neurotd/app_ephys_gene/data/processed/gxp_total_log2_filtered_pc.zip
-!src/neurotd/app_ephys_gene/data/processed/m1_patchseq_meta_data.csv
-!src/neurotd/app_ephys_gene/data/processed/time_delays_all_cells.csv
+!src/neurotd/**/
+!src/neurotd/**/*.py
+!examples/
+!examples/**/
+!examples/**/*.py
+!examples/**/*.md
+!tests/
+!tests/**/
+!tests/**/*.py
+!docs/
+!docs/*.md
+!docs/assets/
+!docs/assets/*.png
+!data/
+!data/README.md
+!data/processed/
+# Only the four previously published datasets are allowlisted.
+!data/processed/cell_name_to_cell_id_and_sample_id.csv
+!data/processed/gxp_total_log2_filtered_pc.zip
+!data/processed/m1_patchseq_meta_data.csv
+!data/processed/time_delays_all_cells.csv
+**/__pycache__/
+**/*.pyc

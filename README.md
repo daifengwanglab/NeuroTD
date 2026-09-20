@@ -8,7 +8,7 @@ Specifically, NeuroTD is evaluated on two real datasets:
 (i) intracranial multi-channel electrophysiological recordings from depth electrodes across medial temporal lobe regions in humans, where hippocampal signals exhibit consistently longer delays than other regions during working memory tasks; and
 (ii) Patch-seq recordings from mouse motor cortex, where intrinsic electrophysiological time-delay features of excitatory neurons are correlated with gene expression, highlighting pathways related to ion transport and neuronal excitability.
 
-<img src="./src/neurotd/img/fig1.png" alt="" width="700"/>
+<img src="./docs/assets/fig1.png" alt="" width="700"/>
 
 _Figure 1_: NeuroTD infers time-varying delays using adaptive sliding-window alignment. Two time-series with changing delays are analyzed by segmenting the signals into overlapping indows and estimating the optimal local shift in each window. The resulting sequence of window-wise estimates is combined to recover a continuous time-varying delay profile, capturing both positive and negative delays over time under noisy conditions.
 
@@ -34,7 +34,7 @@ Install dependencies and the local library with `pip`. NeuroTD uses a modern `py
 From the repository root, install the package with:
 
 ```bash
-pip install -e .
+python -m pip install -e .
 ```
 
 This process usually takes several minutes.
@@ -48,7 +48,7 @@ The discrete-delay simulation evaluates NeuroTD under controlled conditions wher
 Run the discrete-delay simulation from the NeuroTD project directory:
 
 ```bash
-python src/neurotd/fig2_simulation_discrete_shift.py
+python examples/run.py fig2 --headless
 ```
 The script may also be executed in interactive environments (e.g., VS Code or Jupyter), which manage figure display automatically.
 
@@ -58,7 +58,7 @@ This script reproduces the results shown below:
 - **(b)** estimated delay trajectories at a fixed noise level, comparing NeuroTD with baseline methods, and
 - **(c)** root-mean-square error (RMSE) as a function of noise level across methods.
 
-<img src="./src/neurotd/img/fig2.png" alt="" width="900"/>
+<img src="./docs/assets/fig2.png" alt="" width="900"/>
 
 ### Example 2: Simulation study with continuous time-varying delays
 
@@ -67,7 +67,7 @@ The continuous-delay simulation evaluates NeuroTD under controlled conditions wh
 Run the continuous-delay simulation from the NeuroTD project directory:
 
 ```bash
-python src/neurotd/fig3_simulation_continuous_shift.py
+python examples/run.py fig3 --headless
 ```
 The script may also be executed in interactive environments (e.g., VS Code or Jupyter), which manage figure display automatically.
 
@@ -77,7 +77,82 @@ This script reproduces three figures shown below:
 - **(b)** estimated delay trajectories at a fixed noise level, comparing NeuroTD with baseline methods, and
 - **(c)** root-mean-square error (RMSE) as a function of noise level across methods.
 
-<img src="./src/neurotd/img/fig3.png" alt="" width="900"/>
+<img src="./docs/assets/fig3.png" alt="" width="900"/>
+
+## Repository layout
+
+```text
+src/neurotd/           Importable algorithms and reusable application helpers
+examples/simulations/  Paper simulation and schematic entry points
+examples/ieeg/         Intracranial-recording analysis entry point
+examples/patchseq/     Patch-seq analysis and preprocessing entry points
+examples/legacy/       Preserved exploratory scripts (not supported examples)
+data/processed/       Four previously published processed input files
+docs/assets/          Images used in this README
+tests/                Small tests and a continuous-simulation smoke harness
+results/              Generated outputs (ignored by Git)
+```
+
+Use a Python 3.12+ environment and select the same interpreter in your editor.
+Check `python -c "import neurotd; print(neurotd.__file__)"` to ensure you are using
+this checkout rather than another editable installation.
+
+The launcher saves outputs in `results/fig2/`, `results/fig3/`, etc. Omit
+`--headless` to display interactive figures; `plt.show(block=True)` may wait until
+the figure windows are closed. Existing files in the selected output directory
+may be overwritten on rerun, so use `--output-dir` for a fresh run:
+
+```bash
+python examples/run.py fig2 --headless --output-dir results/discrete-run-2
+```
+
+The original algorithms, random seeds and full simulation grids are unchanged.
+The continuous full grid can take substantially longer than the discrete grid.
+Scripts can also be run directly, e.g.
+`python examples/simulations/fig2_simulation_discrete_shift.py`; relative outputs
+then go to the current working directory. Prefer the launcher to keep them separate.
+
+## Real-data applications
+
+See [data requirements](data/README.md) before running either application.
+No raw recordings are automatically downloaded. For iEEG, point to the DANDI
+000574 folder containing the `sub-*` directories:
+
+```bash
+python examples/run.py fig4 --headless --ieeg-dir /path/to/000574
+```
+
+Figure 5 uses the processed Patch-seq files shipped in `data/processed/`. First
+extract the CSV from the ZIP as described in the data instructions, then run:
+
+```bash
+python examples/run.py fig5 --headless
+```
+
+This generates the gene list and correlation plot; enrichment analysis is a
+separate external step described in the script, not an automated online upload.
+Raw Patch-seq preprocessing is resource-intensive and is not part of the small
+test suite. Refer to [example notes](examples/README.md).
+
+For the optional editable schematic (Figure 1), install the extra dependency:
+
+```bash
+python -m pip install -e '.[examples]'
+python examples/run.py fig1
+```
+
+## Tests
+
+After installing the package, run the small, offline tests from the checkout:
+
+```bash
+MPLBACKEND=Agg python -m unittest discover -s tests -v
+```
+
+These check imports, path configuration, the repository layout, and basic delay
+estimation. They do not certify all benchmark implementations or biological claims.
+See [migration and validation notes](docs/repository-layout.md) for the scope of
+the reorganization and known limitations.
 
 <!-- ## Citations
 
