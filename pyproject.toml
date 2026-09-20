@@ -28,6 +28,10 @@ dependencies = [
 
 [tool.setuptools]
 package-dir = {"" = "src"}
+include-package-data = false
+
+[project.optional-dependencies]
+examples = ["python-pptx"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

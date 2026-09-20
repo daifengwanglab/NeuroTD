@@ -33,8 +33,8 @@ from neurotd.time_varying_shift import (
 )
 from neurotd.utils import InterpolatedVector, SlidingWindowPair, ensure_odd_window_size, measure_time, rmse
 
-# below only Required for running parallel using joblib in a remote machine: makes the neurotd package visible for all child processes spawned by joblib.
-sys.path.insert(0, "/mnt/c/Dropbox/DaifengWangLab/NeuroTD/src")
+# Install neurotd in the selected environment so joblib workers can import it.
+from neurotd.paths import data_path
 from neurotd.hiEEG_functions import detect_segments as detect_trials
 from neurotd.hiEEG_functions import load_iEEG_micro
 
@@ -516,10 +516,12 @@ is_parallel = False  # Set to True to run in parallel (be careful - may easily c
 # first subject, first trial has 12_800_000 time samples (400s * 32kHz) at time <0, 572> with empty times
 # Total about 100 of these files, total 1_280_000_000 time samples (40000s * 32kHz)
 # Above just for one electrode, total 32/64/40/62 electrodes, so about 40 billion samples in total
-if computer == 'R12':
-    folder = "/mnt/d/DaifengWangLab/data/dandiset_000574_20250610Ver/000574"  # WSL R12
-elif computer == 'R13':
-    folder = "/mnt/c/DaifengWangLab/data/dandiset_000574_20250610Ver/000574"  # WSL R13
+folder = str(Path(os.environ.get("NEUROTD_IEEG_DIR", data_path() / "raw/000574")).expanduser().resolve())
+if not Path(folder).is_dir():
+    raise FileNotFoundError(
+        f"iEEG dataset directory not found: {folder}. Download DANDI 000574 and set "
+        "NEUROTD_IEEG_DIR to the directory containing sub-01, etc. See data/README.md."
+    )
 n_jobs = n_cpu_cores = 8 if computer == 'R12' else 12  # 'R12' i9-11900KF 'R13' i7-12700KF
 subjects = [1]
 sessions = [1, 2, 3]

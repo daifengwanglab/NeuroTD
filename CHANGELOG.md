@@ -1,3 +1,10 @@
+# Unreleased
+- Separate executable examples, processed data and documentation images from package source.
+- Keep reusable application helpers importable under their existing module names.
+- Add configurable data/output paths, a paper-example launcher and small offline tests.
+- Update installation, data and migration documentation. No estimator, random seed,
+  simulation grid or statistical-analysis changes are included.
+
 # 1.0.1
 - Fixed `.gitignore` to include `CHANGELOG.md` and application subfolders.
 - Improved command-line execution behavior for Matplotlib-based simulation scripts (previously developed primarily in VS Code interactive mode):

@@ -649,9 +649,8 @@ fig = plot_all_sweeps_for_cell(resp_sweeps_ISTD, cell_name=cell_name, kind="resp
 # ephys_dict_path = "C:\Dropbox\DaifengWangLab\NeuroTD\src\neurotd\app_ephys_gene\data\raw_data_ephys_ISTD_sweeps_figs"
 save_all_figures = False
 if save_all_figures:
-    ephys_dict_path = Path(
-        "/mnt/c/Dropbox/DaifengWangLab/NeuroTD/src/neurotd/app_ephys_gene/data/raw_data_ephys_ISTD_sweeps_figs"
-    )
+    ephys_dict_path = FIGURE_PATH / "raw_data_ephys_ISTD_sweeps_figs"
+    ephys_dict_path.mkdir(parents=True, exist_ok=True)
     cell_name_list = sorted(list(set([key[0] for key in response_dict_ISTD.keys()])))
     for cell_name in cell_name_list:  # for cell_name in cell_name_list[798:]:
         resp_sweeps_ISTD = get_cell_responses(response_dict_ISTD, cell_name)
